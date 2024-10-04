@@ -1,26 +1,43 @@
-"""
-Transforms and Loads data into the local SQLite3 database
-Example:
-,general name,count_products,ingred_FPro,avg_FPro_products,avg_distance_root,ingred_normalization_term,semantic_tree_name,semantic_tree_node
-"""
 import sqlite3
 import csv
 import os
 
-#load the csv file and insert into a new sqlite3 database
-def load(dataset="/workspaces/sqlite-lab/data/GroceryDB_IgFPro.csv"):
-    """"Transforms and Loads data into the local SQLite3 database"""
+# Load the CSV file and insert it into a new SQLite3 database
+def load(dataset="/path/to/your/new_dataset.csv", db_name="new_database.db", table_name="new_table"):
+    """Transforms and Loads data into the local SQLite3 database"""
 
-    #prints the full working directory and path
+    # Prints the full working directory and path
     print(os.getcwd())
-    payload = csv.reader(open(dataset, newline=''), delimiter=',')
-    conn = sqlite3.connect('GroceryDB.db')
-    c = conn.cursor()
-    c.execute("DROP TABLE IF EXISTS GroceryDB")
-    c.execute("CREATE TABLE GroceryDB (id,general_name, count_products, ingred_FPro, avg_FPro_products, avg_distance_root, ingred_normalization_term, semantic_tree_name, semantic_tree_node)")
-    #insert
-    c.executemany("INSERT INTO GroceryDB VALUES (?,?, ?, ?, ?, ?, ?, ?, ?)", payload)
-    conn.commit()
-    conn.close()
-    return "GroceryDB.db"
-
+    
+    # Open the CSV file
+    with open(dataset, newline='') as csvfile:
+        payload = csv.reader(csvfile, delimiter=',')
+        
+        # Establish a connection to the SQLite database
+        conn = sqlite3.connect(db_name)
+        c = conn.cursor()
+        
+        # Drop the table if it already exists, then create a new one
+        c.execute(f"DROP TABLE IF EXISTS {table_name}")
+        c.execute(f"""
+        CREATE TABLE {table_name} (
+            id INTEGER PRIMARY KEY,
+            general_name TEXT, 
+            count_products INTEGER, 
+            ingred_FPro REAL, 
+            avg_FPro_products REAL, 
+            avg_distance_root REAL, 
+            ingred_normalization_term REAL, 
+            semantic_tree_name TEXT, 
+            semantic_tree_node TEXT)
+        """)
+        
+        # Skip the header and insert the data into the table
+        next(payload)  # Skip header row
+        c.executemany(f"INSERT INTO {table_name} VALUES (?,?,?,?,?,?,?,?,?)", payload)
+        
+        # Commit the changes and close the connection
+        conn.commit()
+        conn.close()
+        
+    return db_name

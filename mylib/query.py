@@ -1,16 +1,13 @@
-"""Query the database"""
-
 import sqlite3
 
-
-def query():
-    """Query the database for the top 5 rows of the GroceryDB table"""
-    conn = sqlite3.connect("GroceryDB.db")
+def query(database="new_database.db", table="new_table"):
+    """Query the database for the top 5 rows of the specified table"""
+    conn = sqlite3.connect(database)
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM GroceryDB")
-    print("Top 5 rows of the GroceryDB table:")
-    print(cursor.fetchall())
+    cursor.execute(f"SELECT * FROM {table} LIMIT 5")
+    print(f"Top 5 rows of the {table} table:")
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
     conn.close()
     return "Success"
-
-

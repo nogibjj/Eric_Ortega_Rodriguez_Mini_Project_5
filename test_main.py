@@ -1,14 +1,3 @@
-# Example test for the addition function from mylib.calculator
-
-from mylib.calculator import add
-
-
-def test_add():
-    assert add(1, 2) == 3
-
-
-# Future test cases for dataset-related functionality
-
 from mylib.extract import extract
 from mylib.transform_load import load
 from mylib.query import query

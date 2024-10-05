@@ -6,14 +6,11 @@ import os
 def load(dataset="data/avengers.csv", db_name="avengers.db", table_name="Avengers"):
     """Transforms and Loads data into the local SQLite3 database"""
 
-    # Prints the full working directory and path
     print(os.getcwd())
     
-    # Open the CSV file with the correct encoding
     with open(dataset, newline='', encoding="ISO-8859-1") as csvfile:
         payload = csv.reader(csvfile, delimiter=',')
         
-        # Establish a connection to the SQLite database
         conn = sqlite3.connect(db_name)
         c = conn.cursor()
         
@@ -45,7 +42,7 @@ def load(dataset="data/avengers.csv", db_name="avengers.db", table_name="Avenger
         )
         """)
         
-        # Skip the header and insert the data into the table
+        # Skipping header
         next(payload)  # Skip header row
         c.executemany(f"INSERT INTO {table_name} VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", payload)
         

@@ -8,4 +8,6 @@ def extract(url="https://github.com/fivethirtyeight/data/raw/refs/heads/master/a
             f.write(r.content)
     return file_path
 
+if __name__== "__main__":
+    extract()
 

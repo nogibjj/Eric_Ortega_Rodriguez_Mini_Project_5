@@ -9,12 +9,12 @@ table_name = "Avengers"
 
 # Extract
 print("Extracting data from the database...")
-# Since extract is now working directly with the database, there's no need to download data from a URL
+# Extract data directly from the database
 data = extract(database=db_name, table=table_name)
 
 # Transform and load
 print("Transforming and loading data...")
-# Load the CSV data into the database if necessary (optional if already in the database)
+# Load the CSV data into the database if necessary
 load(dataset=dataset_path, db_name=db_name, table_name=table_name)
 
 # Query

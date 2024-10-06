@@ -11,14 +11,14 @@ dataset_path = "data/avengers.csv"
 
 def test_extract():
     """Test the extraction of data from the database"""
-    # Ensure database and table exist before extracting
+    # Ensure the test database and table exist before extracting
     if not os.path.exists(db_name):
         load(dataset=dataset_path, db_name=db_name, table_name=table_name)
 
     # Extract data from the database
     data = extract(database=db_name, table=table_name)
 
-    # Check if data was extracted
+    # Check if data was extracted and assert that it's not empty
     assert data is not None
     assert len(data) > 0  # Ensure some data was extracted
 

@@ -1,3 +1,4 @@
+[![CI](https://github.com/nogibjj/Eric_Ortega_Rodriguez_Mini_Project_5/actions/workflows/cicd.yml/badge.svg)](https://github.com/nogibjj/Eric_Ortega_Rodriguez_Mini_Project_5/actions/workflows/cicd.yml)
 # Eric Ortega Rodriguez Mini Project 5
 
 ## Overview

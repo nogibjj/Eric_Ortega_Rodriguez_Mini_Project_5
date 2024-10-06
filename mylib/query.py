@@ -1,5 +1,4 @@
 import sqlite3
-import sqlite3
 
 def query(database="avengers.db", table="Avengers"):
     """Query the database for the top 5 rows of the specified table"""

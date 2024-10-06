@@ -12,7 +12,7 @@ This project is part of our data engineering coursework that covers data operati
 - Perform CRUD operations
 - Write at least two different SQL queries
 
-## Table of Contents
+## Project Breakdown
 
 ```
 
@@ -52,6 +52,8 @@ This project is part of our data engineering coursework that covers data operati
 ```
 
 ## Deliverables 
+### 1. Python Script
 
+### 2. Screenshots (See Below)
 ## References
 https://github.com/nogibjj/sqlite-lab

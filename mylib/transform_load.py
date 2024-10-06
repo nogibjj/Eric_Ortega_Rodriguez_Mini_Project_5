@@ -1,76 +1,71 @@
 import sqlite3
 import csv
-import os
 
-# Load the CSV file and insert it into a new SQLite3 database
 def load(dataset="data/avengers.csv", db_name="avengers.db", table_name="Avengers"):
-    """Transforms and Loads data into the local SQLite3 database"""
+    """Load data from a CSV file into an SQLite database"""
     
-    print("Current directory:", os.getcwd())
+    # Connect to the SQLite database
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
 
-    try:
-        # Open the CSV file
-        with open(dataset, newline='', encoding="ISO-8859-1") as csvfile:
-            payload = csv.reader(csvfile, delimiter=',')
-            
-            # Connect to the SQLite database (or create it if it doesn't exist)
-            conn = sqlite3.connect(db_name)
-            c = conn.cursor()
-            
-            # Drop the table if it already exists, then create a new one
-            c.execute(f"DROP TABLE IF EXISTS {table_name}")
-            c.execute(f"""
-            CREATE TABLE {table_name} (
-                URL TEXT,
-                Name_Alias TEXT,
-                Appearances INTEGER, 
-                Current TEXT, 
-                Gender TEXT,
-                Probationary_Introl TEXT,
-                Full_Reserve_Avengers_Intro TEXT,
-                Year INTEGER,
-                Years_since_joining INTEGER,
-                Honorary TEXT,
-                Death1 TEXT,
-                Return1 TEXT,
-                Death2 TEXT,
-                Return2 TEXT,
-                Death3 TEXT,
-                Return3 TEXT,
-                Death4 TEXT,
-                Return4 TEXT,
-                Death5 TEXT,
-                Return5 TEXT,
-                Notes TEXT
-            )
-            """)
-            
-            # Skip the header
-            next(payload)
+    # Create the table if it doesn't exist (with 20 columns)
+    cursor.execute(f"""
+    CREATE TABLE IF NOT EXISTS {table_name} (
+        URL TEXT,
+        Name_Alias TEXT,
+        Appearances INTEGER,
+        Current TEXT,
+        Gender TEXT,
+        Probationary_Introl TEXT,
+        Full_Reserve_Avengers_Intro TEXT,
+        Year INTEGER,
+        Years_since_joining INTEGER,
+        Honorary TEXT,
+        Death1 TEXT,
+        Return1 TEXT,
+        Death2 TEXT,
+        Return2 TEXT,
+        Death3 TEXT,
+        Return3 TEXT,
+        Death4 TEXT,
+        Return4 TEXT,
+        Death5 TEXT,
+        Notes TEXT
+    )
+    """)
 
-            # Prepare and sanitize data before inserting
-            sanitized_payload = [
-                tuple(map(lambda x: x.strip() if isinstance(x, str) else x, row)) 
-                for row in payload
-            ]
+    # Load data from CSV file
+    with open(dataset, newline='', encoding="ISO-8859-1") as csvfile:
+        reader = csv.reader(csvfile)
+        next(reader)  # Skip header row
+        for row in reader:
+            # Adjust the INSERT statement to insert only 20 values, matching the table
+            cursor.execute(f"""
+            INSERT INTO {table_name} (URL, Name_Alias, Appearances, Current, Gender, Probationary_Introl, 
+            Full_Reserve_Avengers_Intro, Year, Years_since_joining, Honorary, Death1, Return1, Death2, 
+            Return2, Death3, Return3, Death4, Return4, Death5, Notes)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, row[:20])  # Ensure only 20 values are inserted
 
-            # Insert all rows into the table
-            c.executemany(
-                f"INSERT INTO {table_name} VALUES ("
-                "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                sanitized_payload
-            )
-            
-            # Commit the changes and close the connection
-            conn.commit()
-            print(f"Data loaded successfully into {table_name} table.")
-            
-        conn.close()
-        
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        
-    return db_name
+    # Commit changes and close connection
+    conn.commit()
+    conn.close()
+
+def transform(data):
+    """Example transform function - you can apply specific transformations here"""
+    return data
 
 if __name__ == "__main__":
-    load()
+    # Example of loading and transforming the data
+    load(dataset="data/avengers.csv", db_name="avengers.db", table_name="Avengers")
+
+    # Assuming you extracted the data using your extract function
+    from extract import extract
+    data = extract(database="avengers.db", table="Avengers")
+    
+    # Apply transformation if necessary
+    transformed_data = transform(data)
+
+    # Print the transformed data
+    for row in transformed_data:
+        print(row)

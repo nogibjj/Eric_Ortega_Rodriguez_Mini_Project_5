@@ -1,18 +1,27 @@
-import os
-import requests
+import sqlite3
 
-def extract(url="https://github.com/fivethirtyeight/data/raw/refs/heads/master/avengers/avengers.csv",
-            file_path="data/avengers.csv"):
-    """Extract a dataset from the provided URL to a specified file path"""
+def extract(database="avengers.db", table="Avengers"):
+    """Extract data directly from the specified SQLite database and table"""
     
-    # Ensure the data directory exists
-    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    # Connect to the SQLite database
+    conn = sqlite3.connect(database)
+    cursor = conn.cursor()
+    
+    # Query to select all rows from the table (or a specific subset if needed)
+    cursor.execute(f"SELECT * FROM {table}")
+    
+    # Fetch all rows from the table
+    results = cursor.fetchall()
+    
+    # Close the connection
+    conn.close()
 
-    # Download the file from the URL and save it to the file path
-    with requests.get(url) as r:
-        with open(file_path, 'wb') as f:
-            f.write(r.content)
+    # Return the results (this could be data transformation, saving to a file, etc.)
+    return results
 
-if __name__== "__main__":
-    extract()
+if __name__ == "__main__":
+    # Example of how to call the extract function and print the result
+    data = extract(database="avengers.db", table="Avengers")
+    for row in data:
+        print(row)
 

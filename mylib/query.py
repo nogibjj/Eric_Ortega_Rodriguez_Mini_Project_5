@@ -7,12 +7,18 @@ def create_entry(database, table, entry_data):
         cursor = conn.cursor()
 
         # Insert a new record into the specified table
-        cursor.execute(f"""
-        INSERT INTO {table} (URL, Name_Alias, Appearances, Current, Gender, Probationary_Introl, 
-        Full_Reserve_Avengers_Intro, Year, Years_since_joining, Honorary, Death1, Return1, Death2, 
-        Return2, Death3, Return3, Death4, Return4, Death5, Notes)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, entry_data)
+        cursor.execute(
+            f"""
+            INSERT INTO {table} (
+                URL, Name_Alias, Appearances, Current, Gender, Probationary_Introl, 
+                Full_Reserve_Avengers_Intro, Year, Years_since_joining, Honorary, 
+                Death1, Return1, Death2, Return2, Death3, Return3, Death4, Return4, 
+                Death5, Notes
+            ) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, 
+            entry_data
+        )
 
         conn.commit()
         print("Record created successfully.")
@@ -49,11 +55,14 @@ def update_entry(database, table, column, new_value, condition_column, condition
         cursor = conn.cursor()
 
         # Update the specific record where condition matches
-        cursor.execute(f"""
-        UPDATE {table}
-        SET {column} = ?
-        WHERE {condition_column} = ?
-        """, (new_value, condition_value))
+        cursor.execute(
+            f"""
+            UPDATE {table}
+            SET {column} = ?
+            WHERE {condition_column} = ?
+            """, 
+            (new_value, condition_value)
+        )
 
         conn.commit()
         print("Record updated successfully.")
@@ -71,7 +80,10 @@ def delete_entry(database, table, condition_column, condition_value):
         cursor = conn.cursor()
 
         # Delete the record where the condition matches
-        cursor.execute(f"DELETE FROM {table} WHERE {condition_column} = ?", (condition_value,))
+        cursor.execute(
+            f"DELETE FROM {table} WHERE {condition_column} = ?", 
+            (condition_value,)
+        )
 
         conn.commit()
         print("Record deleted successfully.")
@@ -88,8 +100,9 @@ if __name__ == "__main__":
 
     # Example: Create a new entry
     new_entry = (
-        'http://example.com', 'New Avenger', 100, 'YES', 'MALE', 'Intro Test', 'Full Member', 2022, 
-        1, 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'Test Notes'
+        'http://example.com', 'New Avenger', 100, 'YES', 'MALE', 'Intro Test', 
+        'Full Member', 2022, 1, 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 
+        'NO', 'NO', 'Test Notes'
     )
     create_entry(db_name, table_name, new_entry)
 

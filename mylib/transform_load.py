@@ -50,7 +50,8 @@ def load(dataset="data/avengers.csv", db_name="avengers.db", table_name="Avenger
 
             # Prepare and sanitize data before inserting
             sanitized_payload = [
-                tuple(map(lambda x: x.strip() if isinstance(x, str) else x, row)) for row in payload
+                tuple(map(lambda x: x.strip() if isinstance(x, str) else x, row)) 
+                for row in payload
             ]
 
             # Insert all rows into the table

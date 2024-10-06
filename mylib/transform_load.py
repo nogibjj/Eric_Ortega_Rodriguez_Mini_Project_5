@@ -56,7 +56,8 @@ def load(dataset="data/avengers.csv", db_name="avengers.db", table_name="Avenger
 
             # Insert all rows into the table
             c.executemany(
-                f"INSERT INTO {table_name} VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
+                f"INSERT INTO {table_name} VALUES ("
+                "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 sanitized_payload
             )
             

@@ -60,6 +60,12 @@ def load(dataset="data/avengers.csv", db_name="avengers.db", table_name="Avenger
 def transform(data):
     """Example transform function - you can apply specific transformations here"""
     return data
+def test_transform_empty_data():
+    """Test transform function with empty data."""
+    data = []
+    transformed_data = transform(data)
+    assert transformed_data == []  # Should return empty for empty input
+
 
 if __name__ == "__main__":
     # Example of loading and transforming the data

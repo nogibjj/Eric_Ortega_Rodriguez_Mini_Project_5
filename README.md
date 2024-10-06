@@ -55,5 +55,7 @@ This project is part of our data engineering coursework that covers data operati
 ### 1. Python Script
 
 ### 2. Screenshots (See Below)
+
+![Extraction:](image-2.png)
 ## References
 https://github.com/nogibjj/sqlite-lab

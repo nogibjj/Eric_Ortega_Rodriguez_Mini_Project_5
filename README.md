@@ -55,8 +55,8 @@ This project is part of our data engineering coursework that covers data operati
 ### 1. Python Script
 
 ### 2. Screenshots (See Below)
-
-![#1:](image-2.png)
-![#2](image-3.png)
+![#1:](image-4.png)
+![#2:](image-2.png)
+![#3:](image-3.png)
 ## References
 https://github.com/nogibjj/sqlite-lab

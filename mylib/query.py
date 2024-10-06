@@ -2,79 +2,105 @@ import sqlite3
 
 def create_entry(database, table, entry_data):
     """Create a new entry in the table"""
-    conn = sqlite3.connect(database)
-    cursor = conn.cursor()
-    
-    # Assuming entry_data is a tuple with values corresponding to the table columns
-    cursor.execute(f"""
-    INSERT INTO {table} (URL, Name_Alias, Appearances, Current, Gender, Probationary_Introl, 
-    Full_Reserve_Avengers_Intro, Year, Years_since_joining, Honorary, Death1, Return1, Death2, 
-    Return2, Death3, Return3, Death4, Return4, Death5, Notes)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, entry_data)
-    
-    conn.commit()
-    conn.close()
+    try:
+        conn = sqlite3.connect(database)
+        cursor = conn.cursor()
+
+        # Insert a new record into the specified table
+        cursor.execute(f"""
+        INSERT INTO {table} (URL, Name_Alias, Appearances, Current, Gender, Probationary_Introl, 
+        Full_Reserve_Avengers_Intro, Year, Years_since_joining, Honorary, Death1, Return1, Death2, 
+        Return2, Death3, Return3, Death4, Return4, Death5, Notes)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, entry_data)
+
+        conn.commit()
+        print("Record created successfully.")
+    except sqlite3.Error as e:
+        print(f"Error occurred while creating record: {e}")
+    finally:
+        if conn:
+            conn.close()
 
 
-def read_entries(database, table):
-    """Read all entries from the table"""
-    conn = sqlite3.connect(database)
-    cursor = conn.cursor()
+def read_entries(database, table, limit=5):
+    """Read the top rows from the table"""
+    try:
+        conn = sqlite3.connect(database)
+        cursor = conn.cursor()
 
-    cursor.execute(f"SELECT * FROM {table}")
-    results = cursor.fetchall()
+        # Fetch the top `limit` rows from the table
+        cursor.execute(f"SELECT * FROM {table} LIMIT ?", (limit,))
+        results = cursor.fetchall()
 
-    conn.close()
-    return results
+        return results
+    except sqlite3.Error as e:
+        print(f"Error occurred while reading records: {e}")
+        return []
+    finally:
+        if conn:
+            conn.close()
 
 
 def update_entry(database, table, column, new_value, condition_column, condition_value):
-    """Update an entry in the table"""
-    conn = sqlite3.connect(database)
-    cursor = conn.cursor()
+    """Update an existing entry in the table"""
+    try:
+        conn = sqlite3.connect(database)
+        cursor = conn.cursor()
 
-    cursor.execute(f"""
-    UPDATE {table}
-    SET {column} = ?
-    WHERE {condition_column} = ?
-    """, (new_value, condition_value))
-    
-    conn.commit()
-    conn.close()
+        # Update the specific record where condition matches
+        cursor.execute(f"""
+        UPDATE {table}
+        SET {column} = ?
+        WHERE {condition_column} = ?
+        """, (new_value, condition_value))
+
+        conn.commit()
+        print("Record updated successfully.")
+    except sqlite3.Error as e:
+        print(f"Error occurred while updating record: {e}")
+    finally:
+        if conn:
+            conn.close()
 
 
 def delete_entry(database, table, condition_column, condition_value):
-    """Delete an entry from the table"""
-    conn = sqlite3.connect(database)
-    cursor = conn.cursor()
+    """Delete an entry from the table based on a condition"""
+    try:
+        conn = sqlite3.connect(database)
+        cursor = conn.cursor()
 
-    cursor.execute(f"DELETE FROM {table} WHERE {condition_column} = ?", (condition_value,))
-    
-    conn.commit()
-    conn.close()
+        # Delete the record where the condition matches
+        cursor.execute(f"DELETE FROM {table} WHERE {condition_column} = ?", (condition_value,))
+
+        conn.commit()
+        print("Record deleted successfully.")
+    except sqlite3.Error as e:
+        print(f"Error occurred while deleting record: {e}")
+    finally:
+        if conn:
+            conn.close()
 
 
 if __name__ == "__main__":
-    # Example usage of the CRUD functions
     db_name = "avengers.db"
     table_name = "Avengers"
-    
-    # Create
+
+    # Example: Create a new entry
     new_entry = (
-        'http://example.com', 'New Avenger', 10, 'YES', 'MALE', 'Intro1', 'Full', 2023, 
-        1, 'YES', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'No notes'
+        'http://example.com', 'New Avenger', 100, 'YES', 'MALE', 'Intro Test', 'Full Member', 2022, 
+        1, 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'Test Notes'
     )
     create_entry(db_name, table_name, new_entry)
-    
-    # Read
-    print("All entries:")
+
+    # Example: Read top 5 entries
+    print("Reading top 5 entries:")
     entries = read_entries(db_name, table_name)
     for entry in entries:
         print(entry)
-    
-    # Update
-    update_entry(db_name, table_name, 'Appearances', 15, 'Name_Alias', 'New Avenger')
-    
-    # Delete
+
+    # Example: Update an entry
+    update_entry(db_name, table_name, 'Appearances', 150, 'Name_Alias', 'New Avenger')
+
+    # Example: Delete an entry
     delete_entry(db_name, table_name, 'Name_Alias', 'New Avenger')

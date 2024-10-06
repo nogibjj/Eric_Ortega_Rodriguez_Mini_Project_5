@@ -56,6 +56,7 @@ This project is part of our data engineering coursework that covers data operati
 
 ### 2. Screenshots (See Below)
 
-![Extraction:](image-2.png)
+![#1:](image-2.png)
+![#2](image-3.png)
 ## References
 https://github.com/nogibjj/sqlite-lab

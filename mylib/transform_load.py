@@ -39,12 +39,15 @@ def load(dataset="data/avengers.csv", db_name="avengers.db", table_name="Avenger
         reader = csv.reader(csvfile)
         next(reader)  # Skip header row
         for row in reader:
-            # Adjust the INSERT statement to insert only 20 values, matching the table
+            # Adjust the INSERT statement to fit within the line length limit
             cursor.execute(
                 f"""
-                INSERT INTO {table_name} (URL, Name_Alias, Appearances, Current, Gender, Probationary_Introl, 
-                Full_Reserve_Avengers_Intro, Year, Years_since_joining, Honorary, Death1, Return1, Death2, 
-                Return2, Death3, Return3, Death4, Return4, Death5, Notes)
+                INSERT INTO {table_name} (
+                    URL, Name_Alias, Appearances, Current, Gender, Probationary_Introl, 
+                    Full_Reserve_Avengers_Intro, Year, Years_since_joining, Honorary, 
+                    Death1, Return1, Death2, Return2, Death3, Return3, Death4, Return4, 
+                    Death5, Notes
+                )
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 row[:20]

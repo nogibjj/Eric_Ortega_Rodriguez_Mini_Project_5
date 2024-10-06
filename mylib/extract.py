@@ -3,11 +3,10 @@ import sqlite3
 def extract(database="avengers.db", table="Avengers"):
     """Extract data directly from the specified SQLite database and table"""
     
-    # Connect to the SQLite database
+    # Connecting SQLite database
     conn = sqlite3.connect(database)
     cursor = conn.cursor()
     
-    # Query to select all rows from the table (or a specific subset if needed)
     cursor.execute(f"SELECT * FROM {table}")
     
     # Fetch all rows from the table
@@ -16,7 +15,6 @@ def extract(database="avengers.db", table="Avengers"):
     # Close the connection
     conn.close()
 
-    # Return the results (this could be data transformation, saving to a file, etc.)
     return results
 
 def create_empty_table(database="empty_avengers.db", table="Avengers"):
@@ -24,7 +22,7 @@ def create_empty_table(database="empty_avengers.db", table="Avengers"):
     conn = sqlite3.connect(database)
     cursor = conn.cursor()
 
-    # Create table if it doesn't exist
+    # Create table 
     cursor.execute(
         f"""
         CREATE TABLE IF NOT EXISTS {table} (

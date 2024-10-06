@@ -16,22 +16,17 @@ container-lint:
 
 refactor: format lint
 
-# Build Docker container and deploy it (this is just an example for Docker)
+# Docker
 deploy:
 	@echo "Deploying application..."
 	docker build -t my-app .
 	docker run -d -p 80:80 my-app
 
-# If you're deploying using Heroku, you can uncomment and use this
-# deploy:
-# 	@echo "Pushing to Heroku..."
-# 	git push heroku main
-
-# This command runs all the essential checks and tests before deployment
+# running all checks 
 all: install lint test format
 
-# If you want to combine multiple tasks for deployment
+# used for multiple tasks
 pre-deploy: install refactor test
 
-# A combined rule that runs all necessary tasks before deployment
+# deploy
 deploy-all: pre-deploy deploy

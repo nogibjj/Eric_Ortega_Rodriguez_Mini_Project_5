@@ -8,7 +8,7 @@ def setup_test_db():
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
 
-    # Create the Avengers table
+    # Avengers table
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS Avengers (
@@ -36,7 +36,7 @@ def setup_test_db():
         """
     )
 
-    # Insert some sample data
+    # Insert sample data
     entry_data = (
         'http://example.com', 'New Avenger', 100, 'YES', 'MALE', 'Intro Test', 
         'Full Member', 2022, 1, 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 

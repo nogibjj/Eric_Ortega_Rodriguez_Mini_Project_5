@@ -4,11 +4,11 @@ import csv
 def load(dataset="data/avengers.csv", db_name="avengers.db", table_name="Avengers"):
     """Load data from a CSV file into an SQLite database"""
     
-    # Connect to the SQLite database
+    # Connecting to SQLite database
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
 
-    # Create the table if it doesn't exist (with 20 columns)
+    # Create the table
     cursor.execute(f"""
     CREATE TABLE IF NOT EXISTS {table_name} (
         URL TEXT,
@@ -37,7 +37,7 @@ def load(dataset="data/avengers.csv", db_name="avengers.db", table_name="Avenger
     # Load data from CSV file
     with open(dataset, newline='', encoding="ISO-8859-1") as csvfile:
         reader = csv.reader(csvfile)
-        next(reader)  # Skip header row
+        next(reader)  
         for row in reader:
             # Adjust the INSERT statement to fit within the line length limit
             cursor.execute(
@@ -53,7 +53,6 @@ def load(dataset="data/avengers.csv", db_name="avengers.db", table_name="Avenger
                 row[:20]
             )
 
-    # Commit changes and close connection
     conn.commit()
     conn.close()
 
@@ -68,16 +67,15 @@ def test_transform_empty_data():
 
 
 if __name__ == "__main__":
-    # Example of loading and transforming the data
+
     load(dataset="data/avengers.csv", db_name="avengers.db", table_name="Avengers")
 
-    # Assuming you extracted the data using your extract function
     from extract import extract
     data = extract(database="avengers.db", table="Avengers")
     
-    # Apply transformation if necessary
+    # Transformation
     transformed_data = transform(data)
 
-    # Print the transformed data
+    # Transformed data
     for row in transformed_data:
         print(row)

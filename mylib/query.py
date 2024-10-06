@@ -6,7 +6,7 @@ def query(database="avengers.db", table="Avengers"):
         conn = sqlite3.connect(database)
         cursor = conn.cursor()
 
-        # Fetch top 5 rows from the table
+        # Top 5 rows
         cursor.execute(f"SELECT * FROM {table} LIMIT 5")
         results = cursor.fetchall()
 
@@ -24,7 +24,7 @@ def create_entry(database, table, entry_data):
         conn = sqlite3.connect(database)
         cursor = conn.cursor()
 
-        # Insert a new record into the specified table
+        # Insert a new record 
         cursor.execute(
             f"""
             INSERT INTO {table} (
@@ -52,8 +52,7 @@ def read_entries(database, table, limit=5):
     try:
         conn = sqlite3.connect(database)
         cursor = conn.cursor()
-
-        # Fetch the top `limit` rows from the table
+ 
         cursor.execute(f"SELECT * FROM {table} LIMIT ?", (limit,))
         results = cursor.fetchall()
 
@@ -72,7 +71,6 @@ def update_entry(database, table, column, new_value, condition_column, condition
         conn = sqlite3.connect(database)
         cursor = conn.cursor()
 
-        # Update the specific record where condition matches
         cursor.execute(
             f"""
             UPDATE {table}
@@ -97,7 +95,7 @@ def delete_entry(database, table, condition_column, condition_value):
         conn = sqlite3.connect(database)
         cursor = conn.cursor()
 
-        # Delete the record where the condition matches
+        # Delete
         cursor.execute(
             f"DELETE FROM {table} WHERE {condition_column} = ?", 
             (condition_value,)
@@ -130,8 +128,8 @@ if __name__ == "__main__":
     for entry in entries:
         print(entry)
 
-    # Example: Update an entry
+    # Example: Updating an entry
     update_entry(db_name, table_name, 'Appearances', 150, 'Name_Alias', 'New Avenger')
 
-    # Example: Delete an entry
+    # Example: Deleting an entry
     delete_entry(db_name, table_name, 'Name_Alias', 'New Avenger')

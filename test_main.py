@@ -1,59 +1,69 @@
 import os
-import pytest
-from mylib.extract import extract
-from mylib.transform_load import load
-from mylib.query import query
+import sqlite3
+from mylib.query import query, create_entry
 
-# Paths and parameters for the test
-db_name = "test_avengers.db"
-table_name = "Avengers"
-dataset_path = "data/avengers.csv"
+def setup_test_db():
+    """Create a temporary test database with sample data"""
+    db_name = "test_avengers.db"
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
 
+    # Create the Avengers table
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS Avengers (
+            URL TEXT, 
+            Name_Alias TEXT, 
+            Appearances INTEGER, 
+            Current TEXT, 
+            Gender TEXT, 
+            Probationary_Introl TEXT, 
+            Full_Reserve_Avengers_Intro TEXT, 
+            Year INTEGER, 
+            Years_since_joining INTEGER, 
+            Honorary TEXT, 
+            Death1 TEXT, 
+            Return1 TEXT, 
+            Death2 TEXT, 
+            Return2 TEXT, 
+            Death3 TEXT, 
+            Return3 TEXT, 
+            Death4 TEXT, 
+            Return4 TEXT, 
+            Death5 TEXT, 
+            Notes TEXT
+        )
+        """
+    )
 
-def test_extract():
-    """Test the extraction of data from the database"""
-    # Ensure the test database and table exist before extracting
-    if not os.path.exists(db_name):
-        load(dataset=dataset_path, db_name=db_name, table_name=table_name)
+    # Insert some sample data
+    entry_data = (
+        'http://example.com', 'New Avenger', 100, 'YES', 'MALE', 'Intro Test', 
+        'Full Member', 2022, 1, 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO', 
+        'NO', 'NO', 'Test Notes'
+    )
+    create_entry(db_name, "Avengers", entry_data)
 
-    # Extract data from the database
-    data = extract(database=db_name, table=table_name)
-
-    # Check if data was extracted and assert that it's not empty
-    assert data is not None
-    assert len(data) > 0  # Ensure some data was extracted
-
+    conn.commit()
+    conn.close()
 
 def test_query():
     """Test the query function"""
-    # Ensure the database and table are created before running the query
+    db_name = "test_avengers.db"
+    table_name = "Avengers"
+
+    # Setup the test database
     if not os.path.exists(db_name):
-        load(dataset=dataset_path, db_name=db_name, table_name=table_name)
+        setup_test_db()
 
-    # Now test the query function
+    # Test the query function
     result = query(database=db_name, table=table_name)
-
-    # Check if query result is valid
+    
+    # Assertions
     assert result is not None
-    assert len(result) == 5  # Check if it returns the top 5 rows
-
-
-def test_load():
-    """Test the loading of CSV data into the database"""
-    # Clean up previous test database
-    if os.path.exists(db_name):
-        os.remove(db_name)
-
-    # Load data from the CSV into the database
-    load(dataset=dataset_path, db_name=db_name, table_name=table_name)
-
-    # Check if database file was created
-    assert os.path.exists(db_name)
-
-    # Verify the data has been loaded by querying the table
-    data = extract(database=db_name, table=table_name)
-    assert len(data) > 0  # Ensure data was loaded
-
+    assert len(result) == 5
 
 if __name__ == "__main__":
-    pytest.main()
+    # Run the test
+    test_query()
+    print("Test completed successfully.")

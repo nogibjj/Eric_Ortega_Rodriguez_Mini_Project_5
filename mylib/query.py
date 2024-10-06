@@ -1,4 +1,23 @@
 import sqlite3
+import sqlite3
+
+def query(database="avengers.db", table="Avengers"):
+    """Query the database for the top 5 rows of the specified table"""
+    try:
+        conn = sqlite3.connect(database)
+        cursor = conn.cursor()
+
+        # Fetch top 5 rows from the table
+        cursor.execute(f"SELECT * FROM {table} LIMIT 5")
+        results = cursor.fetchall()
+
+        return results
+    except sqlite3.Error as e:
+        print(f"Error occurred while querying the database: {e}")
+        return []
+    finally:
+        if conn:
+            conn.close()
 
 def create_entry(database, table, entry_data):
     """Create a new entry in the table"""
